@@ -20,10 +20,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. Initialize database
     let pool = services::db::init_db("my_project.db").await?;
 
-    // 2. Fetch data
+    // 2. Synchronize data (new)
+    if let Ok(api_key) = std::env::var("LRCO_API_KEY") {
+        services::sync::synchronize_data(&pool, &api_key).await?;
+    }
+
+    // 3. Fetch data
     let (schools, classes, assessments) = api::dashboard::get_dashboard_data(&pool).await?;
 
-    // 3. Render dashboard
+    // 4. Render dashboard
     ui::dashboard::render_dashboard(&schools, &classes, &assessments);
 
     Ok(())

@@ -1,8 +1,6 @@
 use sqlx::SqlitePool;
-use crate::services::lrco_client::{fetch_lrco_data, LrcoData};
 
-pub async fn synchronize_data(pool: &SqlitePool, api_key: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let data = fetch_lrco_data(api_key).await?;
-    // Implement logic to update SQLite database with LRCO data
+pub async fn synchronize_data(_pool: &SqlitePool, _api_key: &str) -> Result<(), Box<dyn std::error::Error>> {
+    // Lógica futura de integração com o LRCO
     Ok(())
 }

@@ -23,10 +23,10 @@
 
 ## Phase 4: [US2] Sincronização LRCO
 - [X] T010 [US2] Implement `src/services/lrco_client.rs` to handle API interactions
-- [ ] T011 [US2] Implement `src/services/sync.rs` for synchronization logic
-- [ ] T012 [US2] Update `src/main.rs` to add the sync action
+- [X] T011 [US2] Implement `src/services/sync.rs` for synchronization logic
+- [X] T012 [US2] Update `src/main.rs` to add the sync action
 
 ## Phase 5: Polish & Cross-cutting
-- [ ] T013 Finalize error handling for sync service and API calls
-- [ ] T014 Ensure all UI components follow mobile-responsive design principles
-- [ ] T015 Document final implementation in `quickstart.md`
+- [X] T013 Finalize error handling for sync service and API calls
+- [X] T014 Ensure all UI components follow mobile-responsive design principles
+- [X] T015 Document final implementation in `quickstart.md`
