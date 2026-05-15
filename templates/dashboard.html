@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard do Professor</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
+        .school-card { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Unificado</h1>
+    <section>
+        <h2>Escolas Vinculadas</h2>
+        {% for school in data.schools %}
+            <div class="school-card">
+                <h3>{{ school.name }}</h3>
+            </div>
+        {% endfor %}
+    </section>
+    <section>
+        <h2>Próximas Avaliações</h2>
+        <ul>
+            {% for assessment in data.upcoming_assessments %}
+                <li><strong>{{ assessment.school_name }}</strong> - {{ assessment.subject }}: {{ assessment.date }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+</body>
+</html>

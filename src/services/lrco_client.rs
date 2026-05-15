@@ -1,28 +1,33 @@
-use reqwest;
+use reqwest::Client;
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
-pub struct SchoolDTO {
-    pub id: String,
-    pub name: String,
+#[derive(Debug, Deserialize)]
+pub struct LrcoConfig {
+    pub api_url: String,
+    pub api_key: String,
 }
 
 pub struct LrcoClient {
-    client: reqwest::Client,
-    api_key: String,
+    client: Client,
+    config: LrcoConfig,
 }
 
 impl LrcoClient {
-    pub fn new(api_key: String) -> Self {
+    pub fn new(config: LrcoConfig) -> Self {
         Self {
-            client: reqwest::Client::new(),
-            api_key,
+            client: Client::new(),
+            config,
         }
     }
 
-    pub async fn fetch_schools(&self) -> Result<Vec<SchoolDTO>, reqwest::Error> {
-        // Mocking the call structure as actual endpoint details were not provided
-        // In a real implementation, this would use self.api_key for auth
-        Ok(vec![])
+    pub async fn fetch_data(&self, endpoint: &str) -> Result<serde_json::Value, reqwest::Error> {
+        let url = format!("{}/{}", self.config.api_url, endpoint);
+        let response = self.client
+            .get(url)
+            .header("Authorization", format!("Bearer {}", self.config.api_key))
+            .send()
+            .await?;
+        
+        response.json().await
     }
 }

@@ -1,18 +1,17 @@
-use sqlx::SqlitePool;
-use crate::models::{school::School, class::Class, assessment::Assessment};
+use axum::{extract::State, response::IntoResponse};
+use crate::AppState;
+use crate::ui::dashboard::DashboardTemplate;
+use askama::Template;
 
-pub async fn get_dashboard_data(pool: &SqlitePool) -> Result<(Vec<School>, Vec<Class>, Vec<Assessment>), sqlx::Error> {
-    let schools = sqlx::query_as::<_, School>("SELECT * FROM schools")
-        .fetch_all(pool)
-        .await?;
-    
-    let classes = sqlx::query_as::<_, Class>("SELECT * FROM classes")
-        .fetch_all(pool)
-        .await?;
-        
-    let assessments = sqlx::query_as::<_, Assessment>("SELECT * FROM assessments")
-        .fetch_all(pool)
-        .await?;
-        
-    Ok((schools, classes, assessments))
+pub async fn get_dashboard_handler(
+    State(state): State<AppState>,
+) -> impl IntoResponse {
+    let service = state.dashboard_service;
+    match service.get_dashboard_data().await {
+        Ok(data) => {
+            let template = DashboardTemplate { data };
+            template.render().map(|html| axum::response::Html(html)).map_err(|_| axum::http::StatusCode::INTERNAL_SERVER_ERROR).into_response()
+        },
+        Err(_) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Error fetching data").into_response(),
+    }
 }

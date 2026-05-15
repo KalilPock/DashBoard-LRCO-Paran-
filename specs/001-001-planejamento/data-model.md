@@ -1,27 +1,26 @@
-# Data Model: DashBoard de Escolas e Sincronia LRCO
+# Data Model: Dashboard e Sincronia LRCO
 
-## Entities
+## 1. Entidades Principais
 
 ### School
-- `id`: UUID (Primary Key)
-- `name`: String
-- `lrco_id`: String (Unique, mapping to LRCO reference)
+- `id` (UUID/Integer): PK
+- `name` (String): Nome da escola
+- `external_id` (String): ID fornecido pelo LRCO
 
 ### Class
-- `id`: UUID (Primary Key)
-- `school_id`: UUID (Foreign Key)
-- `subject`: String
-- `schedule`: String
-- `lrco_id`: String
+- `id` (UUID/Integer): PK
+- `school_id` (FK): Referência à escola
+- `subject` (String): Disciplina
+- `schedule` (String/JSON): Cronograma
+- `external_id` (String): ID fornecido pelo LRCO
 
 ### Assessment
-- `id`: UUID (Primary Key)
-- `class_id`: UUID (Foreign Key)
-- `date`: DateTime
-- `type`: String
-- `lrco_id`: String
+- `id` (UUID/Integer): PK
+- `class_id` (FK): Referência à turma
+- `go_date` (Date): Data da avaliação
+- `type` (String): Tipo da avaliação
+- `external_id` (String): ID fornecido pelo LRCO
 
-## Validation Rules
-- All `lrco_id` values must be valid strings as per LRCO API requirements.
-- School ID must exist before creating a Class.
-- Class ID must exist before creating an Assessment.
+## 2. Validações
+- Todo `external_id` deve ser único para garantir que a sincronização não crie duplicatas.
+- `Assessment` é o registro principal para o princípio de "Assessment Focus".

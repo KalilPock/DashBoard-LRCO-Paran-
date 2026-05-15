@@ -1,9 +1,13 @@
-# Quickstart: DashBoard de Escolas e Sincronia LRCO
+# Quickstart: Dashboard e Sincronia LRCO
 
-## Getting Started
+## 1. Setup inicial
+1. Certifique-se de que o ambiente Rust está configurado.
+2. Certifique-se de que o banco de dados `my_project.db` está acessível.
+3. Configure as credenciais do LRCO (variáveis de ambiente, se necessário).
 
-1. **Review Specification**: Read `specs/001-001-planejamento/spec.md`.
-2. **Setup Dependencies**: Ensure Rust 1.8x+ is installed.
-3. **Run Migration**: The system uses `sqlx` migrations; run `sqlx migrate run` to setup local DB.
-4. **Configure LRCO Credentials**: Add `LRCO_API_KEY` to your environment to trigger automatic sync on startup.
-5. **Launch Application**: Execute `cargo run` to start the synchronization and view the mobile-responsive dashboard.
+## 2. Execução
+1. Para rodar a sincronização: `cargo run -- sync`
+2. Para rodar o servidor do dashboard: `cargo run -- dashboard`
+
+## 3. Testes
+- Rode `cargo test` para verificar a integração entre os serviços e o banco de dados.

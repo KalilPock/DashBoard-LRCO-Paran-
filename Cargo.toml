@@ -6,13 +6,15 @@ license.workspace = true
 publish.workspace = true
 
 [dependencies]
-axum = "0.7"
-leptos = "0.6"
+actix-web = "4"
+serde = { version = "1.0.228", features = ["derive"] }
 sqlx = { version = "0.7", features = [ "runtime-tokio", "sqlite" ] }
 reqwest = { version = "0.11", features = [ "json" ] }
 tokio = { version = "1", features = [ "full" ] }
-serde = { version = "1.0.228", features = ["derive"] }
 uuid = { version = "1.0", features = ["v4"] }
+askama = "0.16.0"
+axum = "0.8.9"
+serde_json.workspace = true
 
 [lints]
 workspace = true

@@ -1,3 +1,13 @@
+use axum::{routing::{get, post}, Router};
+use std::sync::Arc;
+use crate::services::{dashboard::DashboardService, sync::SyncService, lrco_client::{LrcoClient, LrcoConfig}};
+
+#[derive(Clone)]
+pub struct AppState {
+    pub dashboard_service: Arc<DashboardService>,
+    pub sync_service: Arc<SyncService>,
+}
+
 mod models {
     pub mod school;
     pub mod class;
@@ -7,29 +17,35 @@ mod services {
     pub mod db;
     pub mod lrco_client;
     pub mod sync;
+    pub mod dashboard;
 }
 mod api {
     pub mod dashboard;
+    pub mod sync;
 }
 mod ui {
     pub mod dashboard;
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // 1. Initialize database
-    let pool = services::db::init_db("my_project.db").await?;
+async fn main() {
+    let pool = services::db::init_db("my_project.db").await.expect("Failed to init DB");
+    
+    let lrco_config = LrcoConfig { api_url: "http://api.lrco.pr.gov.br".into(), api_key: "secret".into() };
+    let lrco_client = LrcoClient::new(lrco_config);
 
-    // 2. Synchronize data (new)
-    if let Ok(api_key) = std::env::var("LRCO_API_KEY") {
-        services::sync::synchronize_data(&pool, &api_key).await?;
-    }
+    let state = AppState {
+        dashboard_service: Arc::new(DashboardService::new(pool.clone())),
+        sync_service: Arc::new(SyncService::new(lrco_client, pool.clone())),
+    };
 
-    // 3. Fetch data
-    let (schools, classes, assessments) = api::dashboard::get_dashboard_data(&pool).await?;
+    let app = Router::new()
+        .route("/", get(|| async { "Dashboard Server Running" }))
+        .route("/dashboard", get(api::dashboard::get_dashboard_handler))
+        .route("/sync", post(api::sync::sync_handler))
+        .with_state(state);
 
-    // 4. Render dashboard
-    ui::dashboard::render_dashboard(&schools, &classes, &assessments);
-
-    Ok(())
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await.unwrap();
+    println!("Server running at http://127.0.0.1:8080");
+    axum::serve(listener, app).await.unwrap();
 }

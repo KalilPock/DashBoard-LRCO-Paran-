@@ -1,6 +1,8 @@
-use crate::models::{school::School, class::Class, assessment::Assessment};
+use askama::Template;
+use crate::services::dashboard::DashboardData;
 
-pub fn render_dashboard(schools: &[School], classes: &[Class], assessments: &[Assessment]) {
-    // A interface Leptos será reconstruída aqui futuramente
-    println!("Dashboard renderizado com {} escolas, {} classes e {} avaliações.", schools.len(), classes.len(), assessments.len());
+#[derive(Template)]
+#[template(path = "dashboard.html")]
+pub struct DashboardTemplate {
+    pub data: DashboardData,
 }
