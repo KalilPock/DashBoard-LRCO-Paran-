@@ -8,6 +8,9 @@ release/
 .idea/
 *.log
 .env*
+/target/
+**/*.rs.bk
+Cargo.lock
 
 # Universal
 .DS_Store
@@ -21,3 +24,5 @@ Thumbs.db
 # Added by cargo
 
 /target
+
+
