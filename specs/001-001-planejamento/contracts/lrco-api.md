@@ -1,9 +1,27 @@
-# LRCO API Integration Contract
+# Contracts: LRCO API Interface
 
-## Sync Endpoint
-- `POST /api/v1/sync`
-- Request: `{"school_ids": [string]}`
-- Response: `{"status": "success", "synced_classes": number}`
+## API Client Contract
 
-## Data Schema
-- Expected LRCO data format (JSON) for classes and assessments.
+```rust
+pub trait LrcoClient {
+    async fn fetch_schools(&self) -> Result<Vec<SchoolDTO>, LrcoError>;
+    async fn fetch_classes(&self, school_id: &str) -> Result<Vec<ClassDTO>, LrcoError>;
+    async fn fetch_assessments(&self, class_id: &str) -> Result<Vec<AssessmentDTO>, LrcoError>;
+}
+```
+
+## Data Transfer Objects (DTO)
+
+### SchoolDTO
+- `id`: String
+- `name`: String
+
+### ClassDTO
+- `id`: String
+- `subject`: String
+- `schedule`: String
+
+### AssessmentDTO
+- `id`: String
+- `date`: DateTime
+- `type`: String

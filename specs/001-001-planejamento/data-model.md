@@ -1,23 +1,27 @@
-# Data Model: DashBoard de Escolas
+# Data Model: DashBoard de Escolas e Sincronia LRCO
 
 ## Entities
 
 ### School
-- `id` (Primary Key, UUID/String)
-- `name` (String)
+- `id`: UUID (Primary Key)
+- `name`: String
+- `lrco_id`: String (Unique, mapping to LRCO reference)
 
 ### Class
-- `id` (Primary Key, UUID/String)
-- `school_id` (Foreign Key -> School)
-- `subject` (String)
-- `schedule` (JSON/String, serialized schedule)
+- `id`: UUID (Primary Key)
+- `school_id`: UUID (Foreign Key)
+- `subject`: String
+- `schedule`: String
+- `lrco_id`: String
 
 ### Assessment
-- `id` (Primary Key, UUID/String)
-- `class_id` (Foreign Key -> Class)
-- `date` (ISO8601 Date)
-- `type` (String, e.g., "go")
+- `id`: UUID (Primary Key)
+- `class_id`: UUID (Foreign Key)
+- `date`: DateTime
+- `type`: String
+- `lrco_id`: String
 
-## Relationships
-- `School` 1:N `Class`
-- `Class` 1:N `Assessment`
+## Validation Rules
+- All `lrco_id` values must be valid strings as per LRCO API requirements.
+- School ID must exist before creating a Class.
+- Class ID must exist before creating an Assessment.

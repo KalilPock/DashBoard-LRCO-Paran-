@@ -1,20 +1,23 @@
 CREATE TABLE IF NOT EXISTS schools (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
-    code TEXT NOT NULL UNIQUE
+    lrco_id TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS classes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    school_id INTEGER NOT NULL,
-    name TEXT NOT NULL,
-    FOREIGN KEY (school_id) REFERENCES schools(id)
+    id TEXT PRIMARY KEY,
+    school_id TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    schedule TEXT NOT NULL,
+    lrco_id TEXT NOT NULL UNIQUE,
+    FOREIGN KEY(school_id) REFERENCES schools(id)
 );
 
 CREATE TABLE IF NOT EXISTS assessments (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    class_id INTEGER NOT NULL,
+    id TEXT PRIMARY KEY,
+    class_id TEXT NOT NULL,
     date TEXT NOT NULL,
-    subject TEXT NOT NULL,
-    FOREIGN KEY (class_id) REFERENCES classes(id)
+    type TEXT NOT NULL,
+    lrco_id TEXT NOT NULL UNIQUE,
+    FOREIGN KEY(class_id) REFERENCES classes(id)
 );

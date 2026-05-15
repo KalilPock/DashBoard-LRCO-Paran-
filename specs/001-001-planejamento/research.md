@@ -1,23 +1,27 @@
 # Research: DashBoard de Escolas e Sincronia LRCO
 
-## Technical Decisions
+## Unknowns & Research Tasks
 
-### 1. Language & Ecosystem
-- **Decision**: Rust
-- **Rationale**: Project already in Rust; excellent performance and safety guarantees for data synchronization.
-- **Alternatives considered**: TypeScript/Node.js (for web ecosystem, but decided against given Rust focus).
+| Unknown | Task |
+| :--- | :--- |
+| **LRCO API Details** | Investigate available documentation or existing client structure for LRCO SEED Paraná API. |
+| **Rust Dependencies** | Confirm best practices for `reqwest` and `sqlx` in this environment. |
+| **Dashboard UI** | Determine if existing `ui/dashboard.rs` supports multiple schools/multi-pane layouts. |
+| **Sync Strategy** | Define how synchronization handles potential data discrepancies between LRCO and local DB. |
 
-### 2. Backend API & UI Framework
-- **Decision**: Axum (Backend) + Leptos or Yew (Frontend)
-- **Rationale**: Leptos/Yew provide powerful Rust-based web UI capabilities; Axum is idiomatic for modern Rust web services.
-- **Alternatives considered**: Actix-web (backend), standard REST SPA (TypeScript).
+## Findings
 
-### 3. Local Storage/Database
-- **Decision**: SQLite with `sqlx`
-- **Rationale**: Lightweight, robust, excellent Rust support, perfect for local storage requirement and offline support.
-- **Alternatives considered**: JSON file-based storage (insufficient for complex relations/data integrity), IndexedDB (via WASM/Leptos).
+### LRCO Integration
+- **Decision**: Use `reqwest` for API calls and `serde` for JSON mapping.
+- **Rationale**: Standard Rust ecosystem approach for robust API consumption.
+- **Alternatives**: None considered at this stage given the standard requirement for JSON-based APIs.
 
-## Research Tasks Resolution
-- **Rust Version**: Using stable Rust 1.75+ (aligned with modern async ecosystem).
-- **Primary Dependencies**: `axum`, `leptos` (or `yew`), `sqlx`, `reqwest` (for LRCO API client).
-- **Storage**: SQLite via `sqlx`.
+### Dashboard UI
+- **Decision**: Update `ui/dashboard.rs` to support grouping data by `School`.
+- **Rationale**: Aligns with the Unified Visibility principle.
+- **Alternatives**: Create separate views, but that violates the unified dashboard requirement.
+
+### Data Sync Strategy
+- **Decision**: LRCO API is the source of truth; overwriting local data with updated entries during sync.
+- **Rationale**: Ensures data integrity per Constitution principle IV.
+- **Alternatives**: Partial sync (too complex), manual merge (error-prone).

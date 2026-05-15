@@ -5,7 +5,6 @@ mod models {
 }
 mod services {
     pub mod db;
-    pub mod dashboard;
     pub mod lrco_client;
     pub mod sync;
 }
@@ -16,31 +15,16 @@ mod ui {
     pub mod dashboard;
 }
 
-use axum::{
-    routing::get,
-    Router,
-};
-use std::net::SocketAddr;
-use crate::services::db::establish_connection;
-use crate::api::dashboard::dashboard_handler;
-
 #[tokio::main]
-async fn main() {
-    // 1. Inicializa a conexão com o SQLite
-    let pool = establish_connection().await;
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // 1. Initialize database
+    let pool = services::db::init_db("my_project.db").await?;
 
-    // 2. Configura as rotas da aplicação
-    let app = Router::new()
-        // Rota da API para pegar os dados do dashboard
-        .route("/api/dashboard", get(dashboard_handler))
-        // Rota principal
-        .route("/", get(|| async { "DashBoard LRCO - Servidor Rodando!" }))
-        .with_state(pool);
+    // 2. Fetch data
+    let (schools, classes, assessments) = api::dashboard::get_dashboard_data(&pool).await?;
 
-    // 3. Define o endereço e inicia o servidor (Sintaxe do Axum 0.7)
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    println!("🚀 Servidor rodando em http://{}", addr);
-    
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    // 3. Render dashboard
+    ui::dashboard::render_dashboard(&schools, &classes, &assessments);
+
+    Ok(())
 }

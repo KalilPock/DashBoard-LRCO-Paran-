@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
-use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Assessment {
-    pub id: i64,
-    pub class_id: i64,
+    pub id: String,
+    pub class_id: String,
     pub date: String,
-    pub subject: String,
+    pub r#type: String,
+    pub lrco_id: String,
 }

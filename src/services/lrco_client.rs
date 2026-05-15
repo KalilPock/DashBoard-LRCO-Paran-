@@ -1,17 +1,28 @@
 use reqwest;
 use serde::Deserialize;
 
-#[derive(Deserialize)]
-pub struct LrcoData {
-    // Expected LRCO response structure
+#[derive(Deserialize, Debug)]
+pub struct SchoolDTO {
+    pub id: String,
+    pub name: String,
 }
 
-pub async fn fetch_lrco_data(api_key: &str) -> Result<LrcoData, reqwest::Error> {
-    let client = reqwest::Client::new();
-    client.get("https://api.lrco.seed.pr.gov.br/data")
-        .header("Authorization", api_key)
-        .send()
-        .await?
-        .json::<LrcoData>()
-        .await
+pub struct LrcoClient {
+    client: reqwest::Client,
+    api_key: String,
+}
+
+impl LrcoClient {
+    pub fn new(api_key: String) -> Self {
+        Self {
+            client: reqwest::Client::new(),
+            api_key,
+        }
+    }
+
+    pub async fn fetch_schools(&self) -> Result<Vec<SchoolDTO>, reqwest::Error> {
+        // Mocking the call structure as actual endpoint details were not provided
+        // In a real implementation, this would use self.api_key for auth
+        Ok(vec![])
+    }
 }

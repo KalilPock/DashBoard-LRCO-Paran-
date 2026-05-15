@@ -1,15 +1,10 @@
-# Quickstart: Dashboard & LRCO Sync
+# Quickstart: DashBoard de Escolas e Sincronia LRCO
 
-## Setup
-1. Clone the repository.
-2. Install Rust (latest stable).
-3. Set up the local SQLite database via `sqlx`.
-4. Configure LRCO API credentials in the environment.
+## Getting Started
 
-## Running the Dashboard
-1. Run `cargo run --bin dashboard` to start the web service.
-2. Open `http://localhost:3000` to access the dashboard.
-
-## Syncing with LRCO
-1. Use the sync command in the dashboard UI.
-2. Ensure you have network connectivity to the SEED Paraná system.
+1. **Review Specification**: Read `specs/001-001-planejamento/spec.md`.
+2. **Setup Dependencies**: Ensure Rust 1.8x+ is installed.
+3. **Run Migration**: The system uses `sqlx` migrations; run `sqlx migrate run` to setup local DB.
+4. **Configure LRCO Credentials**: Add `LRCO_API_KEY` to your environment or config file.
+5. **Start Synchronization**: Execute the sync service once to populate local database with school/class lists.
+6. **Access Dashboard**: Launch the main UI; the dashboard will automatically aggregate data from synced schools.

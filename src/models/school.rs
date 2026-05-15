@@ -1,9 +1,17 @@
 use serde::{Deserialize, Serialize};
-use sqlx::FromRow;
 
-#[derive(Debug, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct School {
-    pub id: i64,
+    pub id: String,
     pub name: String,
-    pub code: String,
+    pub lrco_id: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Class {
+    pub id: String,
+    pub school_id: String,
+    pub subject: String,
+    pub schedule: String,
+    pub lrco_id: String,
 }

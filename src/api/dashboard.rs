@@ -1,20 +1,18 @@
-use axum::{extract::State, Json, response::IntoResponse};
 use sqlx::SqlitePool;
-use crate::services::dashboard::get_dashboard_data;
-use serde::Serialize;
+use crate::models::{school::School, class::Class, assessment::Assessment};
 
-#[derive(Serialize)]
-struct DashboardResponse {
-    schools: Vec<crate::models::school::School>,
-    classes: Vec<crate::models::class::Class>,
-    assessments: Vec<crate::models::assessment::Assessment>,
-}
-
-pub async fn dashboard_handler(State(pool): State<SqlitePool>) -> impl IntoResponse {
-    match get_dashboard_data(&pool).await {
-        Ok((schools, classes, assessments)) => {
-            Json(DashboardResponse { schools, classes, assessments }).into_response()
-        }
-        Err(_) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, "Error fetching data").into_response(),
-    }
+pub async fn get_dashboard_data(pool: &SqlitePool) -> Result<(Vec<School>, Vec<Class>, Vec<Assessment>), sqlx::Error> {
+    let schools = sqlx::query_as!(School, "SELECT * FROM schools")
+        .fetch_all(pool)
+        .await?;
+    
+    let classes = sqlx::query_as!(Class, "SELECT * FROM classes")
+        .fetch_all(pool)
+        .await?;
+        
+    let assessments = sqlx::query_as!(Assessment, "SELECT * FROM assessments")
+        .fetch_all(pool)
+        .await?;
+        
+    Ok((schools, classes, assessments))
 }

@@ -1,65 +1,56 @@
 # Implementation Plan: DashBoard de Escolas e Sincronia LRCO
 
-**Branch**: `001-001-planejamento` | **Date**: 2026-05-15 | **Spec**: [specs/001-001-planejamento/spec.md](spec.md)
+**Branch**: `001-001-planejamento` | **Date**: 2026-05-15 | **Spec**: [specs/001-001-planejamento/spec.md](specs/001-001-planejamento/spec.md)
 
 **Input**: Feature specification from `specs/001-001-planejamento/spec.md`
 
 ## Summary
 
-This feature involves creating a unified dashboard to visualize assessment data across multiple schools and implementing a synchronization mechanism with the official LRCO SEED Paraná API.
+The goal is to implement a unified dashboard in the existing Rust-based project to display class data from multiple schools and integrate with the LRCO SEED Paraná API for automatic data synchronization, ensuring adherence to the project constitution's principles of unified visibility and data integrity.
 
 ## Technical Context
 
-**Language/Version**: Rust 1.75+
+**Language/Version**: Rust 1.8x
 
-**Primary Dependencies**: Axum, Leptos, sqlx, reqwest
+**Primary Dependencies**: Needs investigation (likely `reqwest`, `serde`, `tokio`, `sqlite` via `rusqlite` or `sqlx`)
 
-**Storage**: SQLite via sqlx
+**Storage**: SQLite (`my_project.db`)
 
-**Testing**: cargo test
+**Testing**: `cargo test`
 
-**Target Platform**: Desktop (Web/App) and Mobile (Responsive)
+**Target Platform**: Linux (Desktop environment assumed)
 
-**Project Type**: Web Application
+**Project Type**: Desktop-app / CLI (Rust-based)
 
-**Performance Goals**: <200ms loading time for the unified dashboard.
+**Performance Goals**: Responsive UI (< 200ms latency), background sync
 
-**Constraints**: Must adhere to SEED Paraná data privacy regulations, offline-capable (local storage encryption).
+**Constraints**: Compliance with SEED Paraná data privacy, mobile-first design considerations
 
-**Scale/Scope**: 3 state schools per user.
+**Scale/Scope**: Teachers with multiple schools/classes
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-- [ ] Unified Visibility: Dashboard provides a consolidated view.
-- [ ] LRCO Integration: Adheres to LRCO SEED Paraná standards.
-- [ ] Assessment Focus: Dashboard highlights "go" assessment dates.
-- [ ] Data Integrity: Local database synchronized with LRCO source of truth.
-- [ ] Responsive Design: Mobile-first UI/UX.
+- [x] **Unified Visibility**: Dashboard aggregates all schools.
+- [x] **LRCO Integration**: Adherence to LRCO protocols.
+- [x] **Assessment Focus**: Assessment data is the primary view.
+- [x] **Data Integrity**: LRCO is the source of truth.
+- [x] **Responsive Design**: Mobile-first design principles.
 
 ## Project Structure
 
-### Documentation (this feature)
-
-```text
-specs/001-001-planejamento/
-├── plan.md              # This file
-├── research.md          # Phase 0 output
-├── data-model.md        # Phase 1 output
-├── quickstart.md        # Phase 1 output
-├── contracts/           # Phase 1 output
-└── tasks.md             # Phase 2 output
-```
-
-### Source Code (repository root)
-
 ```text
 src/
-├── models/
-├── services/
-├── api/
-└── ui/
+├── main.rs
+├── api/             # API handlers
+├── models/          # Data structures (Assessment, Class, School)
+├── services/        # DB, LRCO client, Sync service
+└── ui/              # Dashboard UI logic
 ```
 
-**Structure Decision**: Using standard Rust project structure with separation for models, services (LRCO integration), API handling, and UI components.
+**Structure Decision**: Using existing `src/` structure for the new dashboard components, adding `services/lrco_client.rs` and updating `src/ui/dashboard.rs`.
+
+## Complexity Tracking
+
+None at this time.
