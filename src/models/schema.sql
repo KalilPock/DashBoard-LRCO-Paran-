@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS schools (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    code TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS classes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    school_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    FOREIGN KEY (school_id) REFERENCES schools(id)
+);
+
+CREATE TABLE IF NOT EXISTS assessments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    class_id INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    FOREIGN KEY (class_id) REFERENCES classes(id)
+);
